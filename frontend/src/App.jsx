@@ -4,7 +4,11 @@ function App() {
 
   return (
     <>
-      <ColorMode/>
+      <ColorMode />
+      
+      <div className="bg-white text-black dark:bg-gray-900 dark:text-white">
+  Hello World
+</div>
     </>
   )
 }
