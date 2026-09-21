@@ -1,14 +1,17 @@
+import { Outlet } from 'react-router-dom';
 import ColorMode from './features/auth/components/ColorMode';
+import Footer from './features/auth/components/Footer';
+import Navbar from './features/auth/components/Navbar';
 
 function App() {
-
   return (
     <>
+      <Navbar />
+      <main>
+        <Outlet />
+      </main>
+      <Footer />
       <ColorMode />
-      
-      <div className="bg-white text-black dark:bg-gray-900 dark:text-white">
-  Hello World
-</div>
     </>
   )
 }

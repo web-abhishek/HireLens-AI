@@ -1,0 +1,38 @@
+import { createBrowserRouter } from "react-router-dom";
+import App from "../App";
+import Home from "../features/auth/pages/Home";
+import Register from "../features/auth/pages/Register";
+import Login from "../features/auth/pages/Login";
+import Privacy from "../features/auth/pages/Privacy";
+import Terms from "../features/auth/pages/Terms";
+
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <App />,
+        children: [
+            {
+                index: true,
+                element: <Home />
+            },
+            {
+                path: '/register',
+                element: <Register />
+            },
+            {
+                path: '/login',
+                element: <Login />
+            },
+            {
+                path: '/privacy',
+                element: <Privacy />
+            },
+            {
+                path: '/terms',
+                element: <Terms />
+            }
+        ]
+    }
+])
+
+export default router;
