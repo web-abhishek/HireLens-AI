@@ -18,7 +18,7 @@ const Terms = () => {
                     <div>
                         <label htmlFor="email" className="mb-2 block text-sm font-medium">Email Address</label>
                         <input id="email" type="email" placeholder="Enter your email address" className="w-full rounded-lg border border-[#d0d5dd] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#ff6a00] focus:ring-2 focus:ring-[#ff6a00]/20 dark:border-[#515861] dark:bg-[#111417] dark:placeholder:text-[#a1a6ad]" />
-                    </div>
+                    </div> 
                     <div>
                         <label htmlFor="password" className="mb-2 block text-sm font-medium">Password</label>
                         <input id="password" type="password" placeholder="Enter your password" className="w-full rounded-lg border border-[#d0d5dd] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#ff6a00] focus:ring-2 focus:ring-[#ff6a00]/20 dark:border-[#515861] dark:bg-[#111417] dark:placeholder:text-[#a1a6ad]" />
