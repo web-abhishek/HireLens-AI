@@ -5,6 +5,7 @@ import Register from "../features/auth/pages/Register";
 import Login from "../features/auth/pages/Login";
 import Privacy from "../features/auth/pages/Privacy";
 import Terms from "../features/auth/pages/Terms";
+import Protected from "../features/auth/components/Protected";
 
 const router = createBrowserRouter([
     {
@@ -13,7 +14,7 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <Home />
+                element: <Protected><Home /></Protected> 
             },
             {
                 path: '/register',

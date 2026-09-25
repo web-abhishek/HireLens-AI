@@ -4,9 +4,10 @@ import './index.css'
 import App from './App.jsx'
 import { RouterProvider } from 'react-router-dom'
 import router from './routes/AppRouter.jsx'
+import { AuthProvider } from './features/auth/context/auth.context.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  <AuthProvider>
     <RouterProvider router={router} />
-  </StrictMode>,
+  </AuthProvider>
 )

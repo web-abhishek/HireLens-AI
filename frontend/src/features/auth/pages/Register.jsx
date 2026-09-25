@@ -1,8 +1,25 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 
 const Register = () => {
-    const handleReload = (e) => {
-        e.preventDefault()
+
+    const navigate = useNavigate();
+
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const {loading, handleRegister}=useAuth();
+
+
+    const handleReload = async (e) => {
+        e.preventDefault();
+        await handleRegister({username,email,password});
+        navigate("/")
+    }
+
+    if(loading){
+        return (<main><h1>Loading...</h1></main>)
     }
 
     return (
@@ -17,15 +34,16 @@ const Register = () => {
                 <form className="space-y-5" onSubmit={handleReload}>
                     <div>
                         <label htmlFor="fullName" className="mb-2 block text-sm font-medium">Full Name</label>
-                        <input id="fullName" type="text" placeholder="Enter your full name" className="w-full rounded-lg border border-[#d0d5dd] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#ff6a00] focus:ring-2 focus:ring-[#ff6a00]/20 dark:border-[#515861] dark:bg-[#111417] dark:placeholder:text-[#a1a6ad]" />
+                        <input id="fullName" type="text" placeholder="Enter your full name" className="w-full rounded-lg border border-[#d0d5dd] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#ff6a00] focus:ring-2 focus:ring-[#ff6a00]/20 dark:border-[#515861] dark:bg-[#111417] dark:placeholder:text-[#a1a6ad]" 
+                        onChange={(e)=>{setUsername(e.target.value)}}/>
                     </div>
                     <div>
                         <label htmlFor="email" className="mb-2 block text-sm font-medium">Email Address</label>
-                        <input id="email" type="email" placeholder="Enter your email address" className="w-full rounded-lg border border-[#d0d5dd] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#ff6a00] focus:ring-2 focus:ring-[#ff6a00]/20 dark:border-[#515861] dark:bg-[#111417] dark:placeholder:text-[#a1a6ad]" />
+                        <input id="email" type="email" placeholder="Enter your email address" className="w-full rounded-lg border border-[#d0d5dd] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#ff6a00] focus:ring-2 focus:ring-[#ff6a00]/20 dark:border-[#515861] dark:bg-[#111417] dark:placeholder:text-[#a1a6ad]" onChange={(e)=>{setEmail(e.target.value)}}/>
                     </div>
                     <div>
                         <label htmlFor="password" className="mb-2 block text-sm font-medium">Password</label>
-                        <input id="password" type="password" placeholder="Create a password" className="w-full rounded-lg border border-[#d0d5dd] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#ff6a00] focus:ring-2 focus:ring-[#ff6a00]/20 dark:border-[#515861] dark:bg-[#111417] dark:placeholder:text-[#a1a6ad]" />
+                        <input id="password" type="password" placeholder="Create a password" className="w-full rounded-lg border border-[#d0d5dd] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#ff6a00] focus:ring-2 focus:ring-[#ff6a00]/20 dark:border-[#515861] dark:bg-[#111417] dark:placeholder:text-[#a1a6ad]" onChange={(e)=>{setPassword(e.target.value)}}/>
                     </div>
                     <button type="submit" className="w-full rounded-lg bg-[#ff6a00] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#e85f00] focus:outline-none focus:ring-2 focus:ring-[#ff6a00] focus:ring-offset-2 focus:ring-offset-[#f5f6f7] dark:focus:ring-offset-[#2a2e34]">Create Account</button>
                     <p className="text-center text-sm text-[#667085] dark:text-[#a1a6ad]">Already have an account? <Link to="/login" className="font-semibold text-[#ff6a00] hover:underline">Log in</Link>.</p>
