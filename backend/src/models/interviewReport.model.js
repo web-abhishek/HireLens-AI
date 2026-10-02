@@ -35,7 +35,7 @@ const behavioralQuestionSchema = new mongoose.schema({
 })
 
 const skillGapSchema = new mongoose.schema({
-    skillName: {
+    skill: {
         type: String,
         required: true
     },

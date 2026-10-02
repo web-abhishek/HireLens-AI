@@ -1,9 +1,10 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import {useAuth} from "../hooks/useAuth";
 
 const Register = () => {
-
     const navigate = useNavigate();
+    
 
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
