@@ -1,55 +1,167 @@
-const { GoogleGenAI } = require("@google/genai")
-import * as z from "zod";
+const { GoogleGenAI } = require("@google/genai");
+const { z } = require("zod");
 
 const ai = new GoogleGenAI({
-    apikey: process.env.Google_API_KEY
+  apiKey: process.env.GOOGLE_API_KEY
 });
 
-async function invokeGeminiAi(){
-const response = await ai.interactions.create({
-  model: "gemini-3.8-flash",
-  input: "Hello Gemini. Explain react hooks",
+const interviewReportJsonSchema = {
+  type: "object",
 
-  response_format: {
-    type: 'text',
-    mime_type: 'application/json',
-    schema: recipeJsonSchema
+  properties: {
+    matchScore: {
+      type: "number",
+      minimum: 0,
+      maximum: 100,
+      description:
+        "The match score between the candidate's profile and the job description."
+    },
+
+    technicalQuestions: {
+      type: "array",
+      description:
+        "A list of technical questions, their intentions, and the candidate's answers.",
+      items: {
+        type: "object",
+        properties: {
+          question: {
+            type: "string",
+            description: "The technical interview question."
+          },
+          intention: {
+            type: "string",
+            description:
+              "The intention or skill being evaluated by the question."
+          },
+          answer: {
+            type: "string",
+            description: "The candidate's answer to the question."
+          }
+        },
+        required: ["question", "intention", "answer"]
+      }
+    },
+
+    behavioralQuestions: {
+      type: "array",
+      description:
+        "A list of behavioral questions, their intentions, and the candidate's answers.",
+      items: {
+        type: "object",
+        properties: {
+          question: {
+            type: "string",
+            description: "The behavioral interview question."
+          },
+          intention: {
+            type: "string",
+            description:
+              "The intention or behavioral trait being evaluated by the question."
+          },
+          answer: {
+            type: "string",
+            description: "The candidate's answer to the question."
+          }
+        },
+        required: ["question", "intention", "answer"]
+      }
+    },
+
+    skillGapSchema: {
+      type: "array",
+      description: "A list of skill gaps and their severity levels.",
+      items: {
+        type: "object",
+        properties: {
+          skill: {
+            type: "string",
+            description: "The skill where the candidate has a gap."
+          },
+          severity: {
+            type: "string",
+            description: "The severity level of the skill gap."
+          }
+        },
+        required: ["skill", "severity"]
+      }
+    },
+
+    preparationPlanSchema: {
+      type: "array",
+      description: "A preparation plan with daily focus areas and tasks.",
+      items: {
+        type: "object",
+        properties: {
+          day: {
+            type: "integer",
+            description: "The preparation day number."
+          },
+          focus: {
+            type: "string",
+            description: "The main focus area for the day."
+          },
+          tasks: {
+            type: "array",
+            description: "A list of preparation tasks for the day.",
+            items: {
+              type: "string"
+            }
+          }
+        },
+        required: ["day", "focus", "tasks"]
+      }
+    }
   },
-  
-});
-  
-}
 
-const interviewReportSchema = z.object({
+  required: [
+    "matchScore",
+    "technicalQuestions",
+    "behavioralQuestions",
+    "skillGapSchema",
+    "preparationPlanSchema"
+  ]
+};
 
+const interviewSchema = z.fromJSONSchema(interviewReportJsonSchema);
 
-  matchScore: z.number().min(0).max(100).description("The match score between the candidate's profile and the job description."),
-  technicalQuestions: z.array(z.object({
-    question: z.string(),
-    intention: z.string(),
-    answer: z.string(),
-  })).description("A list of technical questions, their intentions, and the candidate's answers."),
-  behavioralQuestions: z.array(z.object({
-    question: z.string(),
-    intention: z.string(),
-    answer: z.string(),
-  })).description("A list of behavioral questions, their intentions, and the candidate's answers."),
-  skillGapSchema: z.array(z.object({
-    skill: z.string(),
-    severity: z.string(),
-  })).description("A list of skill gaps and their severity levels."),
-  preparationPlanSchema: z.array(z.object({
-    day: z.number(),
-    focus: z.string(),
-    tasks: z.array(z.string()),
-  })).description("A preparation plan with daily focus areas and tasks.")
-});
+const generateInterviewReport = async ({
+  resume,
+  selfDescription,
+  jobDescription
+}) => {
+  const prompt = `
+You are an AI assistant that generates a comprehensive interview report.
 
-async function generateInterviewReport({resume, selfDescription, jobDescription}){ {
-  
-}
+Analyze the candidate's resume, self-description, and job description.
 
+Resume:
+${resume}
 
+Self-Description:
+${selfDescription}
 
+Job Description:
+${jobDescription}
 
-module.exports = invokeGeminiAi;
+Generate the interview report according to the provided JSON schema.
+`;
+
+  const response = await ai.models.generateContent({
+    model: "gemini-3.5-flash-lite",
+    contents: prompt,
+    config: {
+      responseMimeType: "application/json",
+      responseSchema: interviewReportJsonSchema
+    }
+  });
+
+  const interviewReport = interviewSchema.parse(
+    JSON.parse(response.text)
+  );
+
+  console.log(interviewReport);
+
+  return interviewReport;
+};
+
+module.exports = generateInterviewReport;
